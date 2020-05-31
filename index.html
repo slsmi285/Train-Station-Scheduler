@@ -10,11 +10,45 @@
   <link rel="stylesheet" href="/assets/css/style.css">
 
 
-  <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
-  <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css" rel="stylesheet" />
 </head>
 <body>
+  <div class="container">
+    <div class="jumbotron">
+      <h1 class="jumbo-text">The Train Scheduler</h1>
+      <h4 class="jumbo-text">Plan Your Next Adventure Here!</h4>
+      <h5 class="jumbo-text">Train Routes</h5>
+    </div>
 
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+      <img class="card-img" src="/assets/images/leads-train-treks-img.jpg" alt="Card image">
+        <div class="card-img-overlay">
+          <div class="card-header">Current Train Schedule</div>
+            <div class="card-body">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Train Name</th>
+                    <th scope="col">Destination</th>
+                    <th scope="col">Frequency (min)</th>
+                    <th scope="col">Minutes Away</th>
+                  </tr>
+                </thead>
+                <tbody id="full-table">
+                  <tr>
+                    <th scope="row" id="name"></th>
+                    <td id="destination"></td>
+                    <td id="frequency"></td>
+                    <td id="minutes-away"></td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 
