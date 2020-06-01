@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Train Scheduler</title>
 
-     <!--Boostrap-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Train Scheduler</title>
+
+  <!--Boostrap-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="/assets/css/style.css">
 
@@ -13,47 +14,81 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css" rel="stylesheet" />
 </head>
+
 <body>
   <div class="container">
     <div class="jumbotron">
       <h1 class="jumbo-text">The Train Scheduler</h1>
       <h4 class="jumbo-text">Plan Your Next Adventure Here!</h4>
       <h5 class="jumbo-text">Train Routes</h5>
+
     </div>
 
-    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-      <img class="card-img" src="/assets/images/leads-train-treks-img.jpg" alt="Card image">
-        <div class="card-img-overlay">
-          <div class="card-header">Current Train Schedule</div>
-            <div class="card-body">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">Train Name</th>
-                    <th scope="col">Destination</th>
-                    <th scope="col">Frequency (min)</th>
-                    <th scope="col">Minutes Away</th>
-                  </tr>
-                </thead>
-                <tbody id="full-table">
-                  <tr>
-                    <th scope="row" id="name"></th>
-                    <td id="destination"></td>
-                    <td id="frequency"></td>
-                    <td id="minutes-away"></td>
-                  </tr>
-                  
-                </tbody>
-              </table>
+    <div class="card text-white bg-primary mb-3">
+      <div class="card-header">Current Train Schedule</div>
+      <div class="card-body">
+        <!--<img class="card-img" src="/assets/images/leads-train-treks-img.jpg" alt="Card image">
+        <div class="card-img-overlay">-->
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Train Name</th>
+                <th scope="col">Destination</th>
+                <th scope="col">Frequency (min)</th>
+                <th scope="col">Minutes Away</th>
+              </tr>
+            </thead>
+            <tbody id="full-table">
+              <tr>
+                <th scope="row" id="name"></th>
+                <td id="destination"></td>
+                <td id="frequency"></td>
+                <td id="minutes-away"></td>
+              </tr>
+
+            </tbody>
+          </table>
         </div>
       </div>
+
+      <!--form, add Train-->
+    <div class="card text-white bg-primary mb-3">
+      <div class="card-header">Add Train</div>
+        <div class="card-body">
+          <form method="POST" action="form-handler" onsubmit="return checkForm(this);">
+            <!-- form class="needs-validation" novalidate-->
+            <div class="form-group">
+              <label for="train-name">Train Name</label>
+              <input class="form-control" id="train-name" type="text" required>
+              <div class="invalid-feedback" id="invalid-name"></div>
+            </div>
+            <div class="form-group">
+              <label for="train-destination">Destination</label>
+              <input class="form-control" id="train-destination" type="text" required>
+              <div class="invalid-feedback" id="invalid-destination"></div>
+            </div>
+            <div class="form-group" id="firstTime">
+              <label for="train-first-time">First Train Time (HH:mm - military time)</label>
+              <input class="form-control" id="train-first-time" type="text" required>
+              <div class="invalid-feedback" id="invalid-time"></div>
+            </div>
+            <div class="form-group">
+              <label for="train-frequency">Frequency (min)</label>
+              <input class="form-control" id="train-frequency" type="number" min="1" required>
+              <div class="invalid-feedback" id="invalid-frequency"></div>
+            </div>
+            <button type="button" class="btn btn-primary" id="submit-button" type="submit">Submit</button>
+
+
+          </form>
+
     </div>
   </div>
 
 
 
 
-    <!--jQuery-->
+  <!--jQuery-->
   <script src="https://code.jquery.com/jquery.js"></script>
   <!-- Link to Moment.js -->
   <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
@@ -65,12 +100,13 @@
   <script src="assets/javascript/app.js"></script>
   <!--mapbox-->
   <div id='map' style='width: 400px; height: 300px;'></div>
-  <script>
+  <!--<script>
     mapboxgl.accessToken = 'pk.eyJ1Ijoic2xzbWkyODUiLCJhIjoiY2thdWdhYXAzMTd3ZzJ5cGoxZGVrMjhiNSJ9.dfBiqd4yH-onq4T1j2_yew';
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11'
     });
-  </script>
+  </script>-->
 </body>
+
 </html>
