@@ -2,4 +2,34 @@ body {
     background-image: url(../images/peyton-rocky-mountaineer-main.jpg);
     background-repeat: no-repeat;
     background-size: cover;    
-}
+    }
+    .jumbotron {
+        opacity: 60%;
+        background-image: url(../images/leads-train-treks-experiences.jpg);
+        background-repeat: no-repeat;
+    }
+
+    .card {
+        opacity: 60%;
+        font-weight: bold;
+        color: white;
+
+    }
+    
+    h1, h4, h5 {
+        font-weight: bolder;
+        color: green;
+        text-align: center;
+        
+    }
+    .card-header {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 25px;
+        padding-top: 15px;
+        color: white;
+        text-align: center;
+    
+    }
+    #submit-button {
+        border: 1px solid black;
+    }
