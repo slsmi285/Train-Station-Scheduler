@@ -1,25 +1,7 @@
-(function () {
-    'use strict';
-    window.addEventListener('load', function () {
-        //for all the forms, applying Bootstrap styles
-        var forms = document.getElementsByClassName('needs-validation');
-        //for loop
-        var validation = Array.prototype.filter.call(forms, function(form) {
-            //console.log("this works");
-            form.addEventListener("submit", function (event) {
-
-                if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add("was-validated");
-            }, false);
-    });
-}, false);
-    }) ();
+$(document).ready(function(){
 
 //Initialize Firebase
-var config = {
+var firebaseConfig = {
     apiKey: "AIzaSyDsfjzOZIrOSHB5eIChVdd1aAxKtRHaEK4",
     authDomain: "anewproject-7bdc3.firebaseapp.com",
     databaseURL: "https://anewproject-7bdc3.firebaseio.com",
@@ -28,129 +10,142 @@ var config = {
     messagingSenderId: "167156706154",
     appId: "1:167156706154:web:dc962d5bd3e732f7d65313"
 };
-// Initialize Firebase
+// Initialize Firebase,  //Declaring a variable to store the database info.................
 firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
-console.log("this works, line 35");
 
-$("#submit-button").on("click", function(event) {
-    event.preventDefault();
-})
 
-//Grabs user Input
-var input = $("input");
-var tName = $("#train-name").val().trim();
-var tDestination = $("#train-destination").val().trim();
-var tFirstTime = moment($("#train-first-train").val().trim(), "HH:mm");
-var tFrequency = parseInt($("#train-frequency").val().trim());
+    //Initializing the variables .....................
+    var trainName = "";
+    var trainDestination = "";
+    var trainFrequency = 0;
+    var trainTime = "";
+    var clickCounter = 1;
 
-    if (tName.length === 0) {
-        tName = "";
-        $("#train-name").val("");
-        $("#train-name").attr("class", "form-control is-invalid");
-        $("#invalid-name").text("Please enter a Train name")
-    }
-    else {
-        $("#train-name").attr("class", "form-control");
-        $("#invalid-name").text("");
-    }
-    if (tDestination.length === 0) {
-        tDestination = "";
-        $("#train-destination").val("");
-        $("#train-destination").attr("class", "form-control is-invalid");
-        $("#invalid-destination").text("Please enter a destination");
-    }
-    else {
-        $("#train-destination").attr("class", "form-control");
-        $("#invalid-destination").text("");
-    }
-    if (Number.isInteger(tFrequency) === false) {
-        $("#train-frequency").val("");
-        $("#train-frequency").attr("class", "form-control is-invalid");
-        $("#invalid-frequency").text("Please enter a frequency");
-    }
-    else {
-        $("#train-frequency").attr("class", "form-control");
-        $("#invalid-frequency").text("");
-    }
-    if (moment(tFirstTime).isValid() === false) {
-        tFirstTime = "";
-        $("#train-first-time").val("");
-        $("#train-first-time").attr("class", "form-control is-invalid");
-        $("#invalid-time").text("Please enter a valid time");
+    //Capturing the add train button click.................
+    $("#add-train").on("click", function(event){
+        event.preventDefault();
+        if ($("#train-input").val(),$("#destination-input").val(),$("#time-input").val(), $("#frequency-input").val() === "") {
+            alert("All input fields are mandatory. Enter data in all fields and click the submit button.");
 
-//return;
-    };
+        } else if ($("#time-input").val() > 24) {
+            //An alert is displayed when the user enters a time more than 24.........................
+            alert("Pls enter the 24 hr time format and time cannot be greater than 24.");
+        } else {
+                 
+            //Declaring the variables that will hold the user input values..............................
+            trainName = $("#train-input").val().trim();
+            trainDestination = $("#destination-input").val().trim();
+            trainTime = $("#time-input").val().trim();
+            trainFrequency = $("#frequency-input").val().trim(); 
 
-    $("#train-first-time").attr("class", "form-control");
-        $("#invalid-time").text("");
 
-        //Creates local object for holding train data
-        var newTrain = {
-            name: tName,
-            destination: tDestination,
-            firstTime: tFirstTime.format("HH:mm"),
-            frequency: tFrequency
-        };
-        $("#train-first-time").attr("class", "form-group");
+            //Console log to see if the variables are holding the user input values........................
+            console.log("Input Values");
+            console.log(trainName);
+            console.log(trainDestination);
+            console.log(trainTime);
+            console.log(trainFrequency);
 
-        $("#helpBlock").text("");
+            //Creating a local temporary object for holding train details..................
+            var trainDetail = {
+                name : trainName,
+                destination : trainDestination,
+                frequency : trainFrequency,
+                time : trainTime
+            };
 
-        //Code for pushing train data to Firebase
-        database.ref().push(newTrain);
+            //Upload the train data to the database.........................
+            database.ref().push(trainDetail);
+        
+            //Console log.....................
+            console.log("Temporary object train values");
+            console.log(trainDetail.name);
+            console.log(trainDetail.destination);
+            console.log(trainDetail.frequency);
+            console.log(trainDetail.time);      
+        
+            //Alerts............................
+            alert("A new train details has been added..");        
 
-        console.log(newTrain.name);
-        console.log(newTrain.destination);
-        console.log(newTrain.firstTime);
-        console.log(newTrain.frequency);
+            //Clearing all the values from the input area when the submit button is clicked.
+            $("#train-input").val("");
+            $("#destination-input").val("");
+            $("#time-input").val("");
+            $("#frequency-input").val("");
+        }
+    });
+        
+    //Creating a firebase event for adding train to the database and a row to the html.................
+    database.ref().on("child_added", function(childSnapshot, prevChildKey){
+        console.log("Hello2");
+        console.log(childSnapshot.val());
+        //added remove button
+       // var updateButton = $("<button>").html("<span class='glyphicon glyphicon-edit'></span>").addClass("updateButton").attr("data-index", index).attr("data-key", childSnapshot.key);
+  	   // var removeButton = $("<button>").html("<span class='glyphicon glyphicon-remove'></span>").addClass("removeButton").attr("data-index", index).attr("data-key", childSnapshot.key);
+        //adding function for option to remove row
+         /* */
 
-        //Clear all of text-boxes
-        $("#train-name").val("");
-        $("#train-destination").val("");
-        $("#train-first-time").val("");
-        $("#train-frequency").val("");
-    
+        //Store to a variable.......
+        var trainNumber = clickCounter++;
+        var trainName = childSnapshot.val().name;
+        var trainDestination = childSnapshot.val().destination;
+        var trainTime = childSnapshot.val().time;
+        var trainFrequency = childSnapshot.val().frequency;
 
-    //Firebase watcher + initial loader
-    database.ref().on("child_added", function(childSnapshot) {
-        var tName = (childSnapshot.val().name);
-        var tDestination = (childSnapshot.val().destination);
-        var tFirstTime = (childSnapshot.val().firstTime);
-        var tFrequency = (childSnapshot.val().frequency);
+        //console log.................
+        console.log("database train value");
+        console.log(trainName);
+        console.log(trainDestination);
+        console.log(trainTime);
+        console.log(trainFrequency);
 
-        var convertedTime = moment(tFirstTime, "HH:mm").subtract(1, "years");
-        console.log(convertedTime);
+        //Use moment.js to convert the first train arrival time to ........
+        var trainTimeConvert = moment(trainTime, "HH:mm").subtract(1, "years");
+        console.log("trainTimeConvert", + trainTimeConvert);
 
-        //Current Time
+        //Use moment.js to show current time.............
         var currentTime = moment();
 
-        //Difference between the times
-        var diffTime = moment().diff(moment(convertedTime), "minutes");
-        console.log("Difference in time: " + diffTime);
+        //Use moment.js to show the difference in time between the first train arrival and the current time...............
+        var diffTime  = moment().diff(trainTimeConvert, "minutes");
+        console.log(diffTime);
 
-        //Time apart
-        var tRemainder = diffTime % tFrequency;
-        console.log(tRemainder);
+        var remainder = diffTime % trainFrequency;
+        console.log("Remainder: " + remainder);
 
-        //Minutes Until Train
-        var minutesAway = tFrequency - tRemainder;
-        console.log("Minutes until train: " + minutesAway);
+        //Use moment.js to calculate the time remaining for the train to arrive.........
+        var timeRemain = trainFrequency - remainder;
+        console.log("Time Remain: " + timeRemain);
 
-        //Next Train
-        var nextArrival = moment().add(minutesAway, "minutes");
-        console.log("Arrival time: " + moment(nextArrival).format("HH:mm"));
+        //Use moment.js to calculate the next train arrival time...............
+        var newTrainTime = moment().add(timeRemain, "minutes");
+        var newTrainTimeFormat = moment(newTrainTime).format("HH:mm");
 
-        //Create the new row
-        var newRow = $("<tr>").append(
-            $("<td>").text(tName),
-            $("<td>").text(tDestination),
-            $("<td>").text(tFrequency),
-            $("<td>").text(nextArrival.format("HH:mm")),
-            $("<td>").text(minutesAway),
-        );
+       
 
-        //Append the new row to the table
-        $("#full-table").append(newRow);
-    })
+        //Declaring a variable that will hold the dynamically created rows and table data elements with its values.......
+        var row = $(("<tr class = 'tableRow'><td>" + trainNumber + "</td><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + trainTime + "</td><td>" + trainFrequency  + "</td><td>" + newTrainTimeFormat  + "</td><td>" + timeRemain + "</td></td>" + removeRow + "</td></tr>" ));
+        $("<td>").html("<button>").on("click", function() {
+            $(this).row.remove();
+        })
+        //Appending the row to the table body...........................
+        $(".tableBody").append(row);
+    });  
+
+    function removeRow () {
+        $(".row-" + $(this).attr("data-index")).empty();
+        database.ref().child($(this).attr("data-key")).empty();
+      };
     
+      function editRow () {
+        $(".row-" + $(this).attr("data-index")).children().eq(1).html("<textarea class='newName'></textarea>");
+        $(".row-" + $(this).attr("data-index")).children().eq(2).html("<textarea class='newDestination'></textarea>");
+        $(".row-" + $(this).attr("data-index")).children().eq(3).html("<textarea class='newFrequency' type='number'></textarea>");
+        $(this).toggleClass("updateButton").toggleClass("submitButton");
+      };
+
+      $(document).on("click", "Button", editRow);
+      $(document).on("click", "Button", removeRow); 
+});
